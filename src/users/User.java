@@ -137,7 +137,7 @@ public abstract class User {
 	 * @param input
 	 * @return true if successful
 	 */
-	public boolean create(int patientSSN, int doctorSSN, int nurseSSN, String data) {
+	public boolean create(int patientSSN, int doctorSSN, int nurseSSN, String division, String data) {
 		return false;
 	}
 
