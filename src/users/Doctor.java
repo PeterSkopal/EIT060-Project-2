@@ -28,10 +28,4 @@ public class Doctor extends User {
 		System.out.println(currentSSN + "created " + patient.toString() + " record.");
 		return true;
 	}
-
-	@Override
-	public String toString() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }

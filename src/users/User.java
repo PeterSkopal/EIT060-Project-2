@@ -170,9 +170,4 @@ public abstract class User {
 		}
 		return true;
 	}
-
-	/**
-	 * Returns a string of the users information
-	 */
-	public abstract String toString();
 }
