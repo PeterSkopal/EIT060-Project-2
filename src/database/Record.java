@@ -12,20 +12,18 @@ package database;
  */
 public class Record {
 
-	int id;
-	private int patientSSN, doctorSSN, nurseSSN;
-	private String division;
-	private String data;
+	private String patientSSN, doctorSSN, nurseSSN, division, data;
+	private int id;
 
-	public int getPatient() {
+	public String getPatient() {
 		return patientSSN;
 	}
 
-	public int getDoctor() {
+	public String getDoctor() {
 		return doctorSSN;
 	}
 
-	public int getNurse() {
+	public String getNurse() {
 		return nurseSSN;
 	}
 
@@ -58,10 +56,10 @@ public class Record {
 	 * @param nurse
 	 * @param data
 	 */
-	public Record(int patient, int doctor, int nurse, String division, String data, int id) {
-		this.patientSSN = patient;
-		this.doctorSSN = doctor;
-		this.nurseSSN = nurse;
+	public Record(String patientSSN, String doctorSSN, String nurseSSN, String division, String data, int id) {
+		this.patientSSN = patientSSN;
+		this.doctorSSN = doctorSSN;
+		this.nurseSSN = nurseSSN;
 		this.division = division;
 		this.data = data;
 		this.id = id;

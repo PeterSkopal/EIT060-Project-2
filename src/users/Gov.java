@@ -56,5 +56,6 @@ public class Gov extends User {
 		} catch (Exception e) {
 			Log.append(e.toString() + " was thrown, whilst trying to delete one of " + patientSSN + "'s records.");
 		}
+		return false;
 	}
 }

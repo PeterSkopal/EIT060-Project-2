@@ -19,13 +19,13 @@ import server.Log;
  *
  */
 public abstract class User {
-	protected int currentSSN;
+	protected String currentSSN;
 	protected String division;
 	protected Database db;
 	protected PrintWriter out;
 	protected BufferedReader in;
 
-	public int getSSN() {
+	public String getSSN() {
 		return currentSSN;
 	}
 
@@ -40,7 +40,7 @@ public abstract class User {
 	 * @param division
 	 * @param dataBase
 	 */
-	public User(int currentSSN, String division, Database db, BufferedReader in, PrintWriter out) {
+	public User(String currentSSN, String division, Database db, BufferedReader in, PrintWriter out) {
 		this.currentSSN = currentSSN;
 		this.division = division;
 		this.in = in;
@@ -54,7 +54,7 @@ public abstract class User {
 	 * @param patient
 	 * @return true if the user has permission
 	 */
-	public boolean read(int patientSSN) {
+	public boolean read(String patientSSN) {
 		List<Record> patientRecords = db.getRecords(patientSSN);
 
 		for (int i = 1; i <= patientRecords.size(); i++) {
@@ -98,7 +98,7 @@ public abstract class User {
 	 * @param data
 	 * @return true if permission to write is allowed
 	 */
-	public boolean write(int patientSSN, String data) {
+	public boolean write(String patientSSN, String data) {
 		List<Record> patientRecords = db.getRecords(patientSSN);
 
 		for (int i = 1; i <= patientRecords.size(); i++) {
@@ -148,7 +148,7 @@ public abstract class User {
 	 * @param input
 	 * @return true if successful
 	 */
-	public boolean create(int patientSSN, int doctorSSN, int nurseSSN, String division, String data) {
+	public boolean create(String patientSSN, String doctorSSN, String nurseSSN, String division, String data) {
 		out.println("You don't have enough permissions to create a medical record.\n");
 		return false;
 	}
@@ -159,7 +159,7 @@ public abstract class User {
 	 * @param patient
 	 * @return true if successful deletion
 	 */
-	public boolean delete(int recordID) {
+	public boolean delete(String recordID) {
 		Log.append(currentSSN + " tried to delete " + recordID);
 		return false;
 	}

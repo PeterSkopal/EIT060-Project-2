@@ -12,7 +12,7 @@ import java.util.HashMap;
  */
 public class Database implements Serializable {
 
-	private HashMap<Integer, ArrayList<Record>> recordList;
+	private HashMap<String, ArrayList<Record>> recordList;
 	private int idCounter;
 	private String databaseFilepath;
 
@@ -21,7 +21,7 @@ public class Database implements Serializable {
 	 * objects.
 	 */
 	public Database(String databaseFilepath) {
-		recordList = new HashMap<Integer, ArrayList<Record>>();
+		recordList = new HashMap<String, ArrayList<Record>>();
 		idCounter = 0;
 		this.databaseFilepath = databaseFilepath;
 	}
@@ -40,19 +40,19 @@ public class Database implements Serializable {
 	 * 
 	 * @param patientName
 	 *            Name of the patient the record belong to.
-	 * @param doctor
+	 * @param doctorSSN
 	 *            Name of the associated doctor.
-	 * @param nurse
+	 * @param nurseSSN
 	 *            Name of the associated nurse.
 	 * @param data
 	 *            Medical data string.
 	 */
-	public void createRecord(int patient, int doctor, int nurse, String division, String data) {
-		if (recordList.get(patient) == null) {
-			recordList.put(patient, new ArrayList<Record>());
+	public void createRecord(String patientSSN, String doctorSSN, String nurseSSN, String division, String data) {
+		if (recordList.get(patientSSN) == null) {
+			recordList.put(patientSSN, new ArrayList<Record>());
 		}
 
-		recordList.get(patient).add(new Record(patient, doctor, nurse, division, data, idCounter));
+		recordList.get(patientSSN).add(new Record(patientSSN, doctorSSN, nurseSSN, division, data, idCounter));
 		idCounter++;
 	}
 
@@ -65,7 +65,7 @@ public class Database implements Serializable {
 	 * @return Returns true if specified record is deleted. If not deleted false
 	 *         is returned.
 	 */
-	public boolean deleteRecord(int patientSSN, Record r) {
+	public boolean deleteRecord(String patientSSN, Record r) {
 		if (r != null) {
 			ArrayList<Record> patientList = recordList.get(patientSSN);
 			if (patientList == null)
@@ -83,7 +83,7 @@ public class Database implements Serializable {
 	 * @param patientSSN
 	 * @return Arraylist of all records belonging to patientName.
 	 */
-	public ArrayList<Record> getRecords(int patientSSN) {
+	public ArrayList<Record> getRecords(String patientSSN) {
 		return recordList.get(patientSSN); // Return list of all record
 											// belonging to specified patient.
 	}
