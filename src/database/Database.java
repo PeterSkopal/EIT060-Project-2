@@ -57,10 +57,13 @@ public class Database implements Serializable {
 	 * @param id Record id of the record to be deleted.
 	 * @return Returns true if specified record is deleted. If not deleted false is returned.
 	 */
-	public boolean deleteRecord(Record r) {
+	public boolean deleteRecord(int patient, Record r) {
 		if(r != null) {
-			if(recordList.remove(r) == null)
+			ArrayList<Record> patientList;
+			if((patientList = recordList.get(patient)) == null)
 				return false;
+			
+			patientList.remove(r);
 			return true;
 		}
 		return false;
