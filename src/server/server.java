@@ -34,8 +34,6 @@ public class server implements Runnable {
             out = new PrintWriter(socket.getOutputStream(), true);
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             
-            User user = null;
-            
             String clientMsg = null;
             String msgSplits[] = null;
             while ((clientMsg = in.readLine()) != null) {
@@ -50,18 +48,23 @@ public class server implements Runnable {
 				    case "create":
 				    	if(msgSplits.length < 5)
 				    		break;
-				    	user.create(msgSplits[1], msgSplits[2], msgSplits[3], msgSplits[4]);
+				    	user.create(Integer.parseInt(msgSplits[1]), Integer.parseInt(msgSplits[2]),
+				    				Integer.parseInt(msgSplits[3]), Integer.parseInt(msgSplits[4]));
 				    	break;
 				    case "read":
 				    	if(msgSplits.length < 2)
 				    		break;
-				    	user.read(msgSplits[1]);
+				    	user.read(Integer.parseInt(msgSplits[1]));
 				    	break;
 				    case "delete":
 				    	if(msgSplits.length < 2)
 				    		break;
-				    	user.delete(msgSplits[1]);
+				    	user.delete(Integer.parseInt(msgSplits[1]));
 				    	break;
+				    case "write":
+				    	if(msgSplits.length < 2)
+				    		break;
+				    	user.write(msgSplits[2], Integer.parseInt(msgSplits[1]));
 				    default:
 				    	out.println("Unrecognized command.\n");
 				    }
