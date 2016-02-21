@@ -19,7 +19,6 @@ public abstract class User {
 	private int SSN;
 	private String division = null;
 	private Database db = null;
-	private String filePath = null;
 
 	public int getSSN() {
 		return SSN;
@@ -146,7 +145,7 @@ public abstract class User {
 	    	try
 	        {
 	           FileOutputStream fileOut =
-	           new FileOutputStream("/database.ser");
+	           new FileOutputStream(db.getFilePath());
 	           ObjectOutputStream out = new ObjectOutputStream(fileOut);
 	           out.writeObject(db);
 	           out.close();

@@ -13,13 +13,23 @@ public class Database implements Serializable {
 
 	private HashMap<Integer,ArrayList<Record>> recordList;
 	private int idCounter;
+	private String databaseFilepath;
 	
 	/**
 	 * Creates a new empty database consisting of an arraylist of Record objects.
 	 */
-	public Database() {
+	public Database(String databaseFilepath) {
 		recordList = new HashMap<Integer, ArrayList<Record>>();
 		idCounter = 0;
+		this.databaseFilepath = databaseFilepath;
+	}
+	
+	/**
+	 * Filepath for saving on file.
+	 * @return Returns filepath as a String.
+	 */
+	public String getFilePath() {
+		return databaseFilepath;
 	}
 	
 	/**

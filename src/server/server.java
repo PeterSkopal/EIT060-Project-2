@@ -47,13 +47,13 @@ public class server implements Runnable {
             db = (Database) in.readObject();
             in.close();
             fileIn.close();
-         }catch(IOException i)
+         }catch(IOException i) //If file now found. Create new.
          {
-            i.printStackTrace();
-            return false;
+            db = new Database(databaseFilepath);
+            return true;
          }catch(ClassNotFoundException c)
          {
-            System.out.println("Employee class not found");
+            System.out.println("Database class not found");
             c.printStackTrace();
             return false;
          }
