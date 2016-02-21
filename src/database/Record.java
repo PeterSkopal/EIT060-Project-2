@@ -11,13 +11,16 @@ package database;
 public class Record {
 	
 	int id;
-	private String patient, doctor, nurse, data;
+	private int patient, doctor, nurse;
+	private String division;
+	private String data;
 	
-	public String getPatient() { return patient; }
-	public String getDoctor() { return doctor; }
-	public String getNurse() { return nurse; }
+	public int getPatient() { return patient; }
+	public int getDoctor() { return doctor; }
+	public int getNurse() { return nurse; }
+	public String getDivision() { return division; }
 	public String getData() { return data; }
-	public int getId() { return id };
+	public int getId() { return id; };
 	
 	/**
 	 * Appends a data string to the medical data string.
@@ -34,7 +37,7 @@ public class Record {
 	 * @param nurse
 	 * @param data
 	 */
-	public Record(String patient, String doctor, String nurse, String data, int id) {
+	public Record(int patient, int doctor, int nurse, String data, int id) {
 		this.patient = patient;
 		this.doctor = doctor;
 		this.nurse = nurse;
