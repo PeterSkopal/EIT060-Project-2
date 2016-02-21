@@ -67,8 +67,8 @@ public abstract class User {
 			int index = Integer.parseInt(s);
 			if (index >= 0 && index < patientRecords.size()) {
 				Record record = patientRecords.get(index - 1);
-				if (record.getDoctor() == currentSSN || record.getNurse() == currentSSN
-						|| record.getPatient() == currentSSN) {
+				if (record.getDoctor().equals(currentSSN) || record.getNurse().equals(currentSSN)
+						|| record.getPatient().equals(currentSSN)) {
 					out.println(record.toString());
 					Log.append(currentSSN + " read: " + record.getId() + "from" + patientSSN);
 					return true;
@@ -111,7 +111,7 @@ public abstract class User {
 			int index = Integer.parseInt(s);
 			if (index >= 0 && index < patientRecords.size()) {
 				Record record = patientRecords.get(index - 1);
-				if (record.getDoctor() == currentSSN || record.getNurse() == currentSSN) {
+				if (record.getDoctor().equals(currentSSN) || record.getNurse().equals(currentSSN)) {
 					record.writeData(data);
 					saveDatabase();
 					Log.append(currentSSN + " wrote: " + data + ", to "

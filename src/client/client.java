@@ -1,6 +1,7 @@
 package client;
 
 import java.io.BufferedReader;
+import java.io.Console;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -47,22 +48,25 @@ public class client {
 		try { /* set up a key manager for client authentication */
 			SSLSocketFactory factory = null;
 			try {
-				char[] password = "password".toCharArray();
 				KeyStore ks = KeyStore.getInstance("JKS");
 				KeyStore ts = KeyStore.getInstance("JKS");
 				KeyManagerFactory kmf = KeyManagerFactory.getInstance("SunX509");
 				TrustManagerFactory tmf = TrustManagerFactory.getInstance("SunX509");
 				SSLContext ctx = SSLContext.getInstance("TLS");
 
-				System.out.print("What is the name of your keystore?\n> ");
-				BufferedReader read = new BufferedReader(new InputStreamReader(System.in));
-				String keystoreName = read.readLine();
+				Console console = System.console();
+				System.out.println("What is the name of your keystore?");
+				System.out.print("> ");
+				String keystoreName = console.readLine();
+				System.out.println("Please enter the password to your keystore");
+				System.out.print("> ");
+				char[] password = console.readPassword();
 				keystoreName = "../certificates/" + keystoreName;
 
 				ks.load(new FileInputStream(new File(keystoreName)), password); // keystore
 																				// password
 																				// (storepass)
-				ts.load(new FileInputStream(new File("../certificates/clienttruststore")), password); // truststore
+				ts.load(new FileInputStream(new File("../certificates/clienttruststore")), "password".toCharArray()); // truststore
 																										// password
 																										// (storepass);
 				kmf.init(ks, password); // user password (keypass)
