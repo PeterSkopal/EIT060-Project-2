@@ -36,15 +36,36 @@ public class server implements Runnable {
             
             User user = null;
             
-            
             String clientMsg = null;
+            String msgSplits[] = null;
             while ((clientMsg = in.readLine()) != null) {
-			    switch(clientMsg) {
-			    case "help":
-			    	out.println("Available commands:\ncreate <patient id> <doctor id> <nurse id> <data>\nread <patient id>\nwrite <patient id> <data>\ndelete <patient id>\ndelete");
-			    default:
-			    	out.println("Unrecognized command.\n");
-			    }
+			    
+            	msgSplits = clientMsg.split(" ");
+            	
+            	if(msgSplits[0] != null) {
+	            	switch(msgSplits[0]) {
+				    case "help":
+				    	out.println("Available commands:\ncreate <patient id> <nurse id> <doctor id> <data>\nread <patient id>\nwrite <patient id> <data>\ndelete <patient id>\ndelete");
+				    	break;
+				    case "create":
+				    	if(msgSplits.length < 5)
+				    		break;
+				    	user.create(msgSplits[1], msgSplits[2], msgSplits[3], msgSplits[4]);
+				    	break;
+				    case "read":
+				    	if(msgSplits.length < 2)
+				    		break;
+				    	user.read(msgSplits[1]);
+				    	break;
+				    case "delete":
+				    	if(msgSplits.length < 2)
+				    		break;
+				    	user.delete(msgSplits[1]);
+				    	break;
+				    default:
+				    	out.println("Unrecognized command.\n");
+				    }
+            	}
 
 				out.flush();
                 System.out.println("done\n");
