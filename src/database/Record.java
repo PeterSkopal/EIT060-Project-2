@@ -5,7 +5,7 @@ package database;
  * The record contains medical data which can be appended(?) by the associated nurse and doctor.
  * Simple data structure. Contains get functions to retrieve data and a function to append(?) data.
  * Each record has an unique record id.
- * @author Måns
+ * @author Mï¿½ns
  *
  */
 public class Record {
@@ -27,7 +27,7 @@ public class Record {
 	 * @param data
 	 */
 	public void writeData(String data) {
-		this.data += data; //Hur skall detta implementeras?
+		this.data += data;
 	}
 	
 	/**

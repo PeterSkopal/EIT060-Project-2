@@ -6,7 +6,7 @@ import java.util.HashMap;
 
 /**
  * A serializable database containing a list of medical records.
- * @author Måns
+ * @author Mï¿½ns
  *
  */
 public class Database implements Serializable {
@@ -38,19 +38,19 @@ public class Database implements Serializable {
 		idCounter++;
 	}
 	
-	/**
-	 * Retrieves the record from a specified patient with the specified record id.
-	 * @param id
-	 * @return Returns the record object if found within the database. If not found null is returned.
-	 */
-	public Record getRecordById(int patient, int id) {
-		for(Record r: recordList.get(patient)) {
-			if(r.getId() == id) {
-				return r;
-			}
-		}
-		return null;
-	}
+//	/**
+//	 * Retrieves the record from a specified patient with the specified record id.
+//	 * @param id
+//	 * @return Returns the record object if found within the database. If not found null is returned.
+//	 */
+//	public Record getRecordById(int patient, int id) {
+//		for(Record r: recordList.get(patient)) {
+//			if(r.getId() == id) {
+//				return r;
+//			}
+//		}
+//		return null;
+//	}
 	
 	/**
 	 * Tries to find the record with the specified record id. If found the record will be deleted from the database.
@@ -71,10 +71,10 @@ public class Database implements Serializable {
 	
 	/**
 	 * Retrieves all records belonging to a specified patient in an arraylist.
-	 * @param patientName
+	 * @param patientSSN
 	 * @return Arraylist of all records belonging to patientName.
 	 */
-	public ArrayList<Record> getRecords(int patient) {
-		return recordList.get(patient); //Return list of all record belonging to specified patient.
+	public ArrayList<Record> getRecords(int patientSSN) {
+		return recordList.get(patientSSN); //Return list of all record belonging to specified patient.
 	}
 }
