@@ -6,6 +6,8 @@ import javax.net.*;
 import javax.net.ssl.*;
 import javax.security.cert.X509Certificate;
 
+import users.User;
+
 public class server implements Runnable {
     private ServerSocket serverSocket = null;
     private static int numConnectedClients = 0;
@@ -31,13 +33,19 @@ public class server implements Runnable {
             BufferedReader in = null;
             out = new PrintWriter(socket.getOutputStream(), true);
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-
+            
+            User user = null;
+            
+            
             String clientMsg = null;
             while ((clientMsg = in.readLine()) != null) {
-			    String rev = new StringBuilder(clientMsg).reverse().toString();
-                System.out.println("received '" + clientMsg + "' from client");
-                System.out.print("sending '" + rev + "' to client...");
-				out.println(rev);
+			    switch(clientMsg) {
+			    case "help":
+			    	out.println("Available commands:\ncreate <patient id> <doctor id> <nurse id> <data>\nread <patient id>\nwrite <patient id> <data>\ndelete <patient id>\ndelete");
+			    default:
+			    	out.println("Unrecognized command.\n");
+			    }
+
 				out.flush();
                 System.out.println("done\n");
 			}
