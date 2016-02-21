@@ -47,6 +47,8 @@ public abstract class User {
 		this.out = out;
 		this.db = db;
 	}
+	
+	public abstract boolean read(String patientSSN);
 
 	/**
 	 * Prints out one record belonging to a Patient if user has permission to
@@ -55,46 +57,17 @@ public abstract class User {
 	 * @param patient
 	 * @return true if the user has permission
 	 */
-	public boolean read(String patientSSN) {
+	public void listAllRecords(String patientSSN) {
 		List<Record> patientRecords = db.getRecords(patientSSN);
-		if(patientRecords == null) {
+		if (patientRecords == null) {
 			out.println("No records found");
-			return false;
 		}
-		out.print("Choose which record you want to read.\n");
+		out.print("Choose record.\n");
 		
 		for (int i = 1; i <= patientRecords.size(); i++) {
 			out.print(i + "|\tDoctor: " + patientRecords.get(i - 1).getDoctor() + "\tDivision: " + patientRecords.get(i - 1).getDivision() + "\n");
 		}
 		out.println();
-
-		try {
-			String s = in.readLine();
-			int index = Integer.parseInt(s);
-			if (index > 0 && index <= patientRecords.size()) {
-				Record record = patientRecords.get(index - 1);
-				if (record.getDoctor().equals(currentSSN) || record.getNurse().equals(currentSSN)
-						|| record.getPatient().equals(currentSSN)) {
-					out.println(record.toString());
-					Log.append("User: " + currentSSN + " read record id: " + record.getId() + ", from patient id: " + patientSSN);
-					return true;
-				} else {
-					Log.append("User: " + currentSSN + " tried to read record id: " + record.getId() + ", from patient id: " + patientSSN);
-					
-					out.println("You do not have permission. Try another patient.\n");
-					return false;
-				}
-			} else {
-				Log.append(currentSSN + " entered an invalid index while browsing between " + patientSSN
-						+ " records, while trying to read.");
-				
-				out.println("No such record exist.");
-				return false;
-			}
-		} catch (Exception e) {
-			Log.append(e.toString() + " was thrown, whilst user id: " + currentSSN + "trying to read patient id: " + patientSSN + "'s records.");
-			return false;
-		}
 	}
 
 	/**
@@ -104,45 +77,7 @@ public abstract class User {
 	 * @param data
 	 * @return true if permission to write is allowed
 	 */
-	public boolean write(String patientSSN, String data) {
-		List<Record> patientRecords = db.getRecords(patientSSN);
-
-		out.println("Choose which record you want to write.");
-		for (int i = 1; i <= patientRecords.size(); i++) {
-			out.println(i + ": " + patientRecords.get(i - 1).getId());
-		}
-
-		try {
-			String s = in.readLine();
-			int index = Integer.parseInt(s);
-			if (index >= 0 && index < patientRecords.size()) {
-				Record record = patientRecords.get(index - 1);
-				if (record.getDoctor().equals(currentSSN) || record.getNurse().equals(currentSSN)) {
-					record.writeData(data);
-					saveDatabase();
-					Log.append("User: " + currentSSN + " wrote data: " + data + ", to record id: " + record.getId() + ", to patient id: "
-							+ patientSSN);
-					return true;
-				} else {
-					Log.append(currentSSN + " tried to write: " + data + ", to record id: " + record.getId() + ", to patient id: "
-							+ patientSSN);
-					
-					out.println("You do not have permission. Try another patient.");
-					return false;
-				}
-			} else {
-				Log.append(currentSSN
-						+ " entered an invalid index while browsing between " + patientSSN
-						+ " records, while trying to write.");
-				
-				out.println("No such record exist.");
-				return false;
-			}
-		} catch (Exception e) {
-			Log.append(e.toString() + " was thrown, whilst writing to " + patientSSN + "'s records.");
-			return false;
-		}
-	}
+	public abstract boolean write(String patientSSN, String data);
 
 	/**
 	 * Creates a completely new record associated with a certain patient if not
