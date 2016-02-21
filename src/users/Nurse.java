@@ -21,10 +21,4 @@ public class Nurse extends User {
 	public Nurse(int currentSSN, String division, Database db, BufferedReader in, PrintWriter out) {
 		super(currentSSN, division, db, in, out);
 	}
-
-	@Override
-	public String toString() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }
