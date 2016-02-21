@@ -39,6 +39,7 @@ public class Gov extends User {
 			if (index >= 0 && index < patientRecords.size()) {
 				Record record = patientRecords.get(index - 1);
 				boolean success = db.deleteRecord(patientSSN, record);
+				saveDatabase();
 				if (success) {
 					Log.append(currentSSN + " deleted " + record.getId() + " from patient " + patientSSN);
 					return true;
@@ -56,6 +57,7 @@ public class Gov extends User {
 		} catch (Exception e) {
 			Log.append(e.toString() + " was thrown, whilst trying to delete one of " + patientSSN + "'s records.");
 		}
+		saveDatabase();
 		return false;
 	}
 }
