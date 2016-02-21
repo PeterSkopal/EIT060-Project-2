@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.security.KeyStore;
@@ -22,98 +23,122 @@ import users.Doctor;
 import users.Gov;
 import users.Nurse;
 import users.Patient;
+import database.Database;
 import users.User;
 
 public class server implements Runnable {
-	private ServerSocket serverSocket = null;
-	private static int numConnectedClients = 0;
+    private ServerSocket serverSocket = null;
+    private Database db = null;
+    private static int numConnectedClients = 0;
+    
+    public static final String databaseFilepath = "/database.ser";
 
-	public server(ServerSocket ss) throws IOException {
-		serverSocket = ss;
-		newListener();
-	}
+    public server(ServerSocket ss) throws IOException {
+    	initializeDatabase();
+        serverSocket = ss;
+        newListener();
+    }
+    
+    private boolean initializeDatabase() {
+    	 try
+         {
+            FileInputStream fileIn = new FileInputStream(databaseFilepath);
+            ObjectInputStream in = new ObjectInputStream(fileIn);
+            db = (Database) in.readObject();
+            in.close();
+            fileIn.close();
+         }catch(IOException i)
+         {
+            i.printStackTrace();
+            return false;
+         }catch(ClassNotFoundException c)
+         {
+            System.out.println("Employee class not found");
+            c.printStackTrace();
+            return false;
+         }
+    	 return true;
+    }
 
-	public void run() {
-		try {
-			SSLSocket socket = (SSLSocket) serverSocket.accept();
-			newListener();
-			SSLSession session = socket.getSession();
-			PrintWriter out = null;
-			BufferedReader in = null;
-			out = new PrintWriter(socket.getOutputStream(), true);
-			in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+    public void run() {
+        try {
+            SSLSocket socket=(SSLSocket)serverSocket.accept();
+            newListener();
+            SSLSession session = socket.getSession();
+            PrintWriter out = null;
+            BufferedReader in = null;
+            out = new PrintWriter(socket.getOutputStream(), true);
+            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            
+            X509Certificate cert = (X509Certificate)session.getPeerCertificateChain()[0];
+            String subject = cert.getSubjectDN().getName();   
+            
+            int ssn = Integer.parseInt(getValByAttributeTypeFromIssuerDN(subject,"CN"));
+            String userType = getValByAttributeTypeFromIssuerDN(subject,"OU");
+            String division = getValByAttributeTypeFromIssuerDN(subject,"O");
+            User user;
+            switch (userType) {
+            	case "Doctor":
+            		user = new Doctor(ssn, division, db, in, out);
+            		break;
+            	case "Nurse":
+            		user = new Nurse(ssn, division, db, in, out);
+            		break;
+            	case "Patient":
+            		user = new Patient(ssn, division, db, in, out);
+            		break;
+            	case "Government":
+            		user = new Gov(ssn, division, db, in, out);
+            		break;
+            	default:
+            		out.println("Your usertype is not valid");
+            		in.close();
+            		out.close();
+            		socket.close();
+            		numConnectedClients--;
+            		break;
+            }
+            
+    	    numConnectedClients++;
+            System.out.println("client connected");
+            System.out.println("client name (cert subject DN field): " + subject);
+            System.out.println(numConnectedClients + " concurrent connection(s)\n");
 
-			X509Certificate cert = (X509Certificate) session.getPeerCertificateChain()[0];
-			String subject = cert.getSubjectDN().getName();
-
-			int ssn = Integer.parseInt(getValByAttributeTypeFromIssuerDN(subject, "CN"));
-			String userType = getValByAttributeTypeFromIssuerDN(subject, "OU");
-			String division = getValByAttributeTypeFromIssuerDN(subject, "O");
-			User user;
-			switch (userType) {
-			case "Doctor":
-				user = new Doctor(ssn, division, db, in, out);
-				break;
-			case "Nurse":
-				user = new Nurse(ssn, division, db, in, out);
-				break;
-			case "Patient":
-				user = new Patient(ssn, division, db, in, out);
-				break;
-			case "Government":
-				user = new Gov(ssn, division, db, in, out);
-				break;
-			default:
-				out.println("Your usertype is not valid");
-				in.close();
-				out.close();
-				socket.close();
-				numConnectedClients--;
-				break;
-			}
-
-			numConnectedClients++;
-			System.out.println("client connected");
-			System.out.println("client name (cert subject DN field): " + subject);
-			System.out.println(numConnectedClients + " concurrent connection(s)\n");
-
-			String clientMsg = null;
-			String msgSplits[] = null;
-			while ((clientMsg = in.readLine()) != null) {
-
-				msgSplits = clientMsg.split(" ");
-
-				if (msgSplits[0] != null) {
-					switch (msgSplits[0]) {
-					case "help":
-						out.println(
-								"Available commands:\ncreate <patient id> <nurse id> <doctor id> <data>\nread <patient id>\nwrite <patient id> <data>\ndelete <patient id>\ndelete");
-						break;
-					case "create":
-						if (msgSplits.length < 5)
-							break;
-						user.create(Integer.parseInt(msgSplits[1]), Integer.parseInt(msgSplits[2]),
-								Integer.parseInt(msgSplits[3]), Integer.parseInt(msgSplits[4]));
-						break;
-					case "read":
-						if (msgSplits.length < 2)
-							break;
-						user.read(Integer.parseInt(msgSplits[1]));
-						break;
-					case "delete":
-						if (msgSplits.length < 2)
-							break;
-						user.delete(Integer.parseInt(msgSplits[1]));
-						break;
-					case "write":
-						if (msgSplits.length < 2)
-							break;
-						user.write(msgSplits[2], Integer.parseInt(msgSplits[1]));
-					default:
-						out.println("Unrecognized command.\n");
-					}
-				}
-
+            String clientMsg = null;
+            String msgSplits[] = null;
+            while ((clientMsg = in.readLine()) != null) {
+			    
+            	msgSplits = clientMsg.split(" ");
+            	
+            	if(msgSplits[0] != null) {
+	            	switch(msgSplits[0]) {
+				    case "help":
+				    	out.println("Available commands:\ncreate <patient id> <nurse id> <doctor id> <data>\nread <patient id>\nwrite <patient id> <data>\ndelete <patient id>\ndelete");
+				    	break;
+				    case "create":
+				    	if(msgSplits.length < 5)
+				    		break;
+				    	user.create(Integer.parseInt(msgSplits[1]), Integer.parseInt(msgSplits[2]),
+				    				Integer.parseInt(msgSplits[3]), Integer.parseInt(msgSplits[4]));
+				    	break;
+				    case "read":
+				    	if(msgSplits.length < 2)
+				    		break;
+				    	user.read(Integer.parseInt(msgSplits[1]));
+				    	break;
+				    case "delete":
+				    	if(msgSplits.length < 2)
+				    		break;
+				    	user.delete(Integer.parseInt(msgSplits[1]));
+				    	break;
+				    case "write":
+				    	if(msgSplits.length < 2)
+				    		break;
+				    	user.write(Integer.parseInt(msgSplits[1]), msgSplits[2]);
+				    default:
+				    	out.println("Unrecognized command.\n");
+				    }
+            	}
 				out.flush();
 				System.out.println("done\n");
 			}
