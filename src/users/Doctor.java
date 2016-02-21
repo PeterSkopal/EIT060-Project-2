@@ -3,7 +3,7 @@ package users;
 import java.io.BufferedReader;
 import java.io.PrintWriter;
 
-import Database.*;
+import database.Database;
 
 /**
  * 
@@ -25,7 +25,7 @@ public class Doctor extends User {
 	public boolean create(String patientName, Nurse nurse, String input) {
 		Patient patient = new Patient(patientName, patientDivision, this, nurse);
 		patient.createRecord(input);
-		System.out.println(GetCurrentTimeStamp.getTimeStamp() + ": " + CERTIFICATE.toString() + "created " + patient.toString() + " record.");
+		System.out.println(currentSSN + "created " + patient.toString() + " record.");
 		return true;
 	}
 

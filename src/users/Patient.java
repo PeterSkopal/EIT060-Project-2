@@ -2,7 +2,8 @@ package users;
 
 import java.io.BufferedReader;
 import java.io.PrintWriter;
-import Database.Database;
+
+import database.Database;
 
 /**
  * 
@@ -16,8 +17,8 @@ public class Patient extends User {
 	}
 
 	public String toString() {
-		return "Patients Social Security Number: " + currentSSN + "Patients division: " + division +  ". Patients Doctor: " + doctor.toString() + "Patients Nurse: " + nurse.toString();
+		return "Patients Social Security Number: " + currentSSN + "Patients division: " + division
+				+ ". Patients Doctor: " + doctor.toString() + "Patients Nurse: " + nurse.toString();
 	}
-	
-	
+
 }

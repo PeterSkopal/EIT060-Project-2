@@ -2,10 +2,11 @@ package users;
 
 import java.io.BufferedReader;
 import java.io.PrintWriter;
-import Database.Database;
+
+import database.Database;
 
 /**
- *  
+ * 
  * @author Skopal
  *
  */

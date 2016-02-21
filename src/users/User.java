@@ -1,12 +1,15 @@
 package users;
 
+import java.io.BufferedReader;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
-import java.io.BufferedReader;
 import java.io.PrintWriter;
 import java.util.List;
-import Database.*;
+
+import database.Database;
+import database.Record;
+import server.Log;
 
 /**
  * This class specifies a User of the system. These can be of several types:
@@ -16,11 +19,11 @@ import Database.*;
  *
  */
 public abstract class User {
-	private int currentSSN;
-	private String division;
-	private Database db;
-	private PrintWriter out;
-	private BufferedReader in;
+	protected int currentSSN;
+	protected String division;
+	protected Database db;
+	protected PrintWriter out;
+	protected BufferedReader in;
 
 	public int getSSN() {
 		return currentSSN;
@@ -66,19 +69,16 @@ public abstract class User {
 			if (record.getDoctor() == currentSSN || record.getNurse() == currentSSN
 					|| record.getPatient() == currentSSN) {
 				out.println(record.toString());
-				Log.append(GetCurrentTimeStamp.getTimeStamp() + ": " + currentSSN + " read: " + record.getId() + "from"
-						+ patientSSN);
+				Log.append(currentSSN + " read: " + record.getId() + "from" + patientSSN);
 				return true;
 			} else {
-				Log.append(GetCurrentTimeStamp.getTimeStamp() + ": " + currentSSN + " tried to read: " + record.getId()
-						+ ", from " + patientSSN);
+				Log.append(currentSSN + " tried to read: " + record.getId() + ", from " + patientSSN);
 
 				out.println("You do not have permission. Try another patient.");
 				return false;
 			}
 		} else {
-			Log.append(GetCurrentTimeStamp.getTimeStamp() + ": " + currentSSN
-					+ " entered an invalid index while browsing between " + patientSSN
+			Log.append(currentSSN + " entered an invalid index while browsing between " + patientSSN
 					+ " records, while trying to read.");
 
 			out.println("No such record exist.");
@@ -151,28 +151,25 @@ public abstract class User {
 		Log.append(GetCurrentTimeStamp.getTimeStamp() + ": " + currentSSN + " tried to delete " + patient.toString());
 		return false;
 	}
-	
+
 	/**
 	 * 
 	 * @return
 	 */
-	 private boolean saveDatabase() {
-	    	try
-	        {
-	           FileOutputStream fileOut =
-	           new FileOutputStream(db.getFilePath());
-	           ObjectOutputStream out = new ObjectOutputStream(fileOut);
-	           out.writeObject(db);
-	           out.close();
-	           fileOut.close();
-	           System.out.printf("Serialized data is saved in /tmp/employee.ser");
-	        }catch(IOException i)
-	        {
-	            i.printStackTrace();
-	            return false;
-	        }
-	    	return true;
-	    }
+	private boolean saveDatabase() {
+		try {
+			FileOutputStream fileOut = new FileOutputStream(db.getFilePath());
+			ObjectOutputStream out = new ObjectOutputStream(fileOut);
+			out.writeObject(db);
+			out.close();
+			fileOut.close();
+			System.out.printf("Serialized data is saved in /tmp/employee.ser");
+		} catch (IOException i) {
+			i.printStackTrace();
+			return false;
+		}
+		return true;
+	}
 
 	/**
 	 * Returns a string of the users information

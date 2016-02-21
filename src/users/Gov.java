@@ -3,7 +3,7 @@ package users;
 import java.io.BufferedReader;
 import java.io.PrintWriter;
 
-import Database.Database;
+import database.Database;
 
 /**
  * 
@@ -25,7 +25,8 @@ public class Gov extends User {
 	public boolean delete(Patient patient) {
 		boolean removed = RECORDS.get(patient).removeRecord();
 		if (removed) {
-			System.out.println(GetCurrentTimeStamp.getTimeStamp() + ": " + CERTIFICATE.toString() + "removed " + patient.toString() + " record.");
+			System.out.println(currentSSN + "removed "
+					+ patient.toString() + " record.");
 			return true;
 		}
 		return false;
