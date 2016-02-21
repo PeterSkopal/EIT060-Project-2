@@ -70,10 +70,10 @@ public abstract class User {
 				if (record.getDoctor().equals(currentSSN) || record.getNurse().equals(currentSSN)
 						|| record.getPatient().equals(currentSSN)) {
 					out.println(record.toString());
-					Log.append(currentSSN + " read: " + record.getId() + "from" + patientSSN);
+					Log.append("User: " + currentSSN + " read record id: " + record.getId() + ", from patient id:" + patientSSN);
 					return true;
 				} else {
-					Log.append(currentSSN + " tried to read: " + record.getId() + ", from " + patientSSN);
+					Log.append("User: " + currentSSN + " tried to read record id: " + record.getId() + ", from patient id:" + patientSSN);
 					
 					out.println("You do not have permission. Try another patient.");
 					return false;
