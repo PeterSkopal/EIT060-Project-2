@@ -120,23 +120,23 @@ public class server implements Runnable {
 					case "create":
 						if (msgSplits.length < 5)
 							break;
-						user.create(Integer.parseInt(msgSplits[1]), Integer.parseInt(msgSplits[2]),
-								Integer.parseInt(msgSplits[3]), user.getDivision(), msgSplits[4]);
+						user.create(msgSplits[1], msgSplits[2],
+								msgSplits[3], user.getDivision(), msgSplits[4]);
 						break;
 					case "read":
 						if (msgSplits.length < 2)
 							break;
-						user.read(Integer.parseInt(msgSplits[1]));
+						user.read(msgSplits[1]);
 						break;
 					case "delete":
 						if (msgSplits.length < 2)
 							break;
-						user.delete(Integer.parseInt(msgSplits[1]));
+						user.delete(msgSplits[1]);
 						break;
 					case "write":
 						if (msgSplits.length < 2)
 							break;
-						user.write(Integer.parseInt(msgSplits[1]), msgSplits[2]);
+						user.write(msgSplits[1], msgSplits[2]);
 					default:
 						out.println("Unrecognized command.\n");
 					}
