@@ -56,22 +56,6 @@ public class Database implements Serializable {
 		idCounter++;
 	}
 
-	// /**
-	// * Retrieves the record from a specified patient with the specified record
-	// id.
-	// * @param id
-	// * @return Returns the record object if found within the database. If not
-	// found null is returned.
-	// */
-	// public Record getRecordById(int patient, int id) {
-	// for(Record r: recordList.get(patient)) {
-	// if(r.getId() == id) {
-	// return r;
-	// }
-	// }
-	// return null;
-	// }
-
 	/**
 	 * Tries to find the record with the specified record id. If found the
 	 * record will be deleted from the database.

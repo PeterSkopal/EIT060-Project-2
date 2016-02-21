@@ -61,27 +61,32 @@ public abstract class User {
 			out.println(i + ": " + patientRecords.get(i - 1).getId());
 		}
 
-		System.out.println("Choose which record you want to read.");
-		String s = in.readLine();
-		int index = Integer.parseInt(s);
-		if (index >= 0 && index < patientRecords.size()) {
-			Record record = patientRecords.get(index - 1);
-			if (record.getDoctor() == currentSSN || record.getNurse() == currentSSN
-					|| record.getPatient() == currentSSN) {
-				out.println(record.toString());
-				Log.append(currentSSN + " read: " + record.getId() + "from" + patientSSN);
-				return true;
+		out.println("Choose which record you want to read.");
+		try {
+			String s = in.readLine();
+			int index = Integer.parseInt(s);
+			if (index >= 0 && index < patientRecords.size()) {
+				Record record = patientRecords.get(index - 1);
+				if (record.getDoctor() == currentSSN || record.getNurse() == currentSSN
+						|| record.getPatient() == currentSSN) {
+					out.println(record.toString());
+					Log.append(currentSSN + " read: " + record.getId() + "from" + patientSSN);
+					return true;
+				} else {
+					Log.append(currentSSN + " tried to read: " + record.getId() + ", from " + patientSSN);
+					
+					out.println("You do not have permission. Try another patient.");
+					return false;
+				}
 			} else {
-				Log.append(currentSSN + " tried to read: " + record.getId() + ", from " + patientSSN);
-
-				out.println("You do not have permission. Try another patient.");
+				Log.append(currentSSN + " entered an invalid index while browsing between " + patientSSN
+						+ " records, while trying to read.");
+				
+				out.println("No such record exist.");
 				return false;
 			}
-		} else {
-			Log.append(currentSSN + " entered an invalid index while browsing between " + patientSSN
-					+ " records, while trying to read.");
-
-			out.println("No such record exist.");
+		} catch (Exception e) {
+			Log.append(e.toString() + " was thrown, whilst reading " + patientSSN + "'s records.");
 			return false;
 		}
 	}
@@ -101,28 +106,33 @@ public abstract class User {
 		}
 
 		out.println("Choose which record you want to write.");
-		String s = in.readLine();
-		int index = Integer.parseInt(s);
-		if (index >= 0 && index < patientRecords.size()) {
-			Record record = patientRecords.get(index - 1);
-			if (record.getDoctor() == currentSSN || record.getNurse() == currentSSN) {
-				record.writeData(data);
-				Log.append(GetCurrentTimeStamp.getTimeStamp() + ": " + currentSSN + " wrote: " + data + ", to "
-						+ patientSSN);
-				return true;
+		try {
+			String s = in.readLine();
+			int index = Integer.parseInt(s);
+			if (index >= 0 && index < patientRecords.size()) {
+				Record record = patientRecords.get(index - 1);
+				if (record.getDoctor() == currentSSN || record.getNurse() == currentSSN) {
+					record.writeData(data);
+					Log.append(currentSSN + " wrote: " + data + ", to "
+							+ patientSSN);
+					return true;
+				} else {
+					Log.append(currentSSN + " tried to write: " + data + ", to "
+							+ patientSSN);
+					
+					out.println("You do not have permission. Try another patient.");
+					return false;
+				}
 			} else {
-				Log.append(GetCurrentTimeStamp.getTimeStamp() + ": " + currentSSN + " tried to write: " + data + ", to "
-						+ patientSSN);
-
-				out.println("You do not have permission. Try another patient.");
+				Log.append(currentSSN
+						+ " entered an invalid index while browsing between " + patientSSN
+						+ " records, while trying to write.");
+				
+				out.println("No such record exist.");
 				return false;
 			}
-		} else {
-			Log.append(GetCurrentTimeStamp.getTimeStamp() + ": " + currentSSN
-					+ " entered an invalid index while browsing between " + patientSSN
-					+ " records, while trying to write.");
-
-			out.println("No such record exist.");
+		} catch (Exception e) {
+			Log.append(e.toString() + " was thrown, whilst writing to " + patientSSN + "'s records.");
 			return false;
 		}
 	}
@@ -148,7 +158,7 @@ public abstract class User {
 	 * @return true if successful deletion
 	 */
 	public boolean delete(int recordID) {
-		Log.append(GetCurrentTimeStamp.getTimeStamp() + ": " + currentSSN + " tried to delete " + patient.toString());
+		Log.append(currentSSN + " tried to delete " + recordID);
 		return false;
 	}
 
