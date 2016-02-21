@@ -1,4 +1,4 @@
-package Database;
+package database;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -36,7 +36,7 @@ public class Database implements Serializable {
 	/**
 	 * Retrieves the record with the specified id.
 	 * @param id
-	 * @return Returns the record object if found within the databse. If not found null is returned.
+	 * @return Returns the record object if found within the database. If not found null is returned.
 	 */
 	public Record getRecordById(int id) {
 		for(Record r: recordList) {
