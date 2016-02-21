@@ -3,6 +3,7 @@ import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.security.KeyStore;
@@ -21,15 +22,41 @@ import users.Doctor;
 import users.Gov;
 import users.Nurse;
 import users.Patient;
+import database.Database;
 import users.User;
 
 public class server implements Runnable {
     private ServerSocket serverSocket = null;
+    private Database db = null;
     private static int numConnectedClients = 0;
+    
+    public static final String databaseFilepath = "/database.ser";
 
     public server(ServerSocket ss) throws IOException {
+    	initializeDatabase();
         serverSocket = ss;
         newListener();
+    }
+    
+    private boolean initializeDatabase() {
+    	 try
+         {
+            FileInputStream fileIn = new FileInputStream(databaseFilepath);
+            ObjectInputStream in = new ObjectInputStream(fileIn);
+            db = (Database) in.readObject();
+            in.close();
+            fileIn.close();
+         }catch(IOException i)
+         {
+            i.printStackTrace();
+            return false;
+         }catch(ClassNotFoundException c)
+         {
+            System.out.println("Employee class not found");
+            c.printStackTrace();
+            return false;
+         }
+    	 return true;
     }
 
     public void run() {
@@ -106,7 +133,7 @@ public class server implements Runnable {
 				    case "write":
 				    	if(msgSplits.length < 2)
 				    		break;
-				    	user.write(msgSplits[2], Integer.parseInt(msgSplits[1]));
+				    	user.write(Integer.parseInt(msgSplits[1]), msgSplits[2]);
 				    default:
 				    	out.println("Unrecognized command.\n");
 				    }

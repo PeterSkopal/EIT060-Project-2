@@ -30,14 +30,7 @@ public class Record {
 		this.data += data;
 	}
 	
-	/**
-	 * Creates a new Record file with the specified parameters.
-	 * @param patient
-	 * @param doctor
-	 * @param nurse
-	 * @param data
-	 */
-	public Record(int patient, int doctor, int nurse, String data, int id) {
+	public Record(int patient, int doctor, int nurse, String division, String data, int id) {
 		this.patient = patient;
 		this.doctor = doctor;
 		this.nurse = nurse;

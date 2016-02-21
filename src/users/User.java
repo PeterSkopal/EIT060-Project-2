@@ -1,8 +1,12 @@
 package users;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.List;
 
 import Database.*;
+import database.Database;
 
 /**
  * This class specifies a User of the system. These can be of several types:
@@ -13,8 +17,9 @@ import Database.*;
  */
 public abstract class User {
 	private int SSN;
-	private String division;
-	private Database db;
+	private String division = null;
+	private Database db = null;
+	private String filePath = null;
 
 	public int getSSN() {
 		return SSN;
@@ -30,9 +35,10 @@ public abstract class User {
 	 * @param name
 	 * @param division
 	 */
-	public User(int SSN, String division, Database db) {
+	public User(int SSN, String division, Database db, String filePath) {
 		this.SSN = SSN;
 		this.division = division;
+		this.filePath = filePath;
 	}
 
 	/**
@@ -131,6 +137,28 @@ public abstract class User {
 				+ patient.toString());
 		return false;
 	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	 private boolean saveDatabase() {
+	    	try
+	        {
+	           FileOutputStream fileOut =
+	           new FileOutputStream("/database.ser");
+	           ObjectOutputStream out = new ObjectOutputStream(fileOut);
+	           out.writeObject(db);
+	           out.close();
+	           fileOut.close();
+	           System.out.printf("Serialized data is saved in /tmp/employee.ser");
+	        }catch(IOException i)
+	        {
+	            i.printStackTrace();
+	            return false;
+	        }
+	    	return true;
+	    }
 
 	/**
 	 * Returns a string of the users information
