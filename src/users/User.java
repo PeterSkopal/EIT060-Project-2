@@ -3,10 +3,10 @@ package users;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.io.BufferedReader;
+import java.io.PrintWriter;
 import java.util.List;
-
 import Database.*;
-import database.Database;
 
 /**
  * This class specifies a User of the system. These can be of several types:
@@ -16,12 +16,14 @@ import database.Database;
  *
  */
 public abstract class User {
-	private int SSN;
-	private String division = null;
-	private Database db = null;
+	private int currentSSN;
+	private String division;
+	private Database db;
+	private PrintWriter out;
+	private BufferedReader in;
 
 	public int getSSN() {
-		return SSN;
+		return currentSSN;
 	}
 
 	public String getDivision() {
@@ -31,51 +33,58 @@ public abstract class User {
 	/**
 	 * Creates a User
 	 * 
-	 * @param name
+	 * @param currentSSN
 	 * @param division
+	 * @param dataBase
 	 */
-	public User(int SSN, String division, Database db, String filePath) {
-		this.SSN = SSN;
+	public User(int currentSSN, String division, Database db, BufferedReader in, PrintWriter out) {
+		this.currentSSN = currentSSN;
 		this.division = division;
-		this.filePath = filePath;
+		this.in = in;
+		this.out = out;
 	}
 
 	/**
-	 * Prints out patients record if user has permission to read record.
+	 * Prints out one record belonging to a Patient if user has permission to
+	 * read record.
 	 * 
 	 * @param patient
 	 * @return true if the user has permission
 	 */
-	public boolean read(Patient patient) {
-		if (patient.hasThisTreator(CERTIFICATE.typeOfUser())) {
-			List<Record> patientRecords = db.getRecords(patient.getSSN());
-			System.out.println(patientRecords);
-			LOG.append(GetCurrentTimeStamp.getTimeStamp() + ": " + CERTIFICATE.toString() + " read "
-					+ patient.toString() + " record.");
-			return true;
-		}
-		System.out.println("You do not have permission. Try another patient.");
-		return false;
-	}
+	public boolean read(int patientSSN) {
+		List<Record> patientRecords = db.getRecords(patientSSN);
 
-	// /**
-	// * Prints out all the records from the users associated Division.
-	// *
-	// * @return true if authenticated
-	// */
-	// public boolean readDivision() {
-	// List<RECORD> myPatientsRecords =
-	// RECORDS.makeAListOfEveryPatientRecordIHave(name);
-	// if (myPatientsRecords.size() > 0) {
-	// System.out.println(myPatientsRecords);
-	// LOG.append(GetCurrentTimeStamp.getTimeStamp() + ": " +
-	// CERTIFICATE.toString()
-	// + " read all the records from her/his division.");
-	// return true;
-	// }
-	// System.out.println("You do not have any patients.");
-	// return false;
-	// }
+		for (int i = 1; i <= patientRecords.size(); i++) {
+			out.println(i + ": " + patientRecords.get(i - 1).getId());
+		}
+
+		System.out.println("Choose which record you want to read.");
+		String s = in.readLine();
+		int index = Integer.parseInt(s);
+		if (index >= 0 && index < patientRecords.size()) {
+			Record record = patientRecords.get(index - 1);
+			if (record.getDoctor() == currentSSN || record.getNurse() == currentSSN
+					|| record.getPatient() == currentSSN) {
+				out.println(record.toString());
+				Log.append(GetCurrentTimeStamp.getTimeStamp() + ": " + currentSSN + " read: " + record.getId() + "from"
+						+ patientSSN);
+				return true;
+			} else {
+				Log.append(GetCurrentTimeStamp.getTimeStamp() + ": " + currentSSN + " tried to read: " + record.getId()
+						+ ", from " + patientSSN);
+
+				out.println("You do not have permission. Try another patient.");
+				return false;
+			}
+		} else {
+			Log.append(GetCurrentTimeStamp.getTimeStamp() + ": " + currentSSN
+					+ " entered an invalid index while browsing between " + patientSSN
+					+ " records, while trying to read.");
+
+			out.println("No such record exist.");
+			return false;
+		}
+	}
 
 	/**
 	 * Appends data into already existing record
@@ -88,27 +97,34 @@ public abstract class User {
 		List<Record> patientRecords = db.getRecords(patientSSN);
 
 		for (int i = 1; i <= patientRecords.size(); i++) {
-			System.out.println(i + ": " + patientRecords.get(i - 1).getId());
+			out.println(i + ": " + patientRecords.get(i - 1).getId());
 		}
 
-		System.out.println("Choose which record you want to write.");
-		String s = InputStream(); // Här får vi en siffra från inputen
+		out.println("Choose which record you want to write.");
+		String s = in.readLine();
 		int index = Integer.parseInt(s);
 		if (index >= 0 && index < patientRecords.size()) {
 			Record record = patientRecords.get(index - 1);
 			if (record.getDoctor() == currentSSN || record.getNurse() == currentSSN) {
-				
-			}
-			record.writeData(data);
-			LOG.append(GetCurrentTimeStamp.getTimeStamp() + ": " + CERTIFICATE.toString() + " wrote: " + data + ", to "
-					+ patientSSN);
-		} else {
-			System.out.println("No such record exist.");
-		}
+				record.writeData(data);
+				Log.append(GetCurrentTimeStamp.getTimeStamp() + ": " + currentSSN + " wrote: " + data + ", to "
+						+ patientSSN);
+				return true;
+			} else {
+				Log.append(GetCurrentTimeStamp.getTimeStamp() + ": " + currentSSN + " tried to write: " + data + ", to "
+						+ patientSSN);
 
-		return true;
-		System.out.println("You do not have permission. Try another patient.");
-		return false;
+				out.println("You do not have permission. Try another patient.");
+				return false;
+			}
+		} else {
+			Log.append(GetCurrentTimeStamp.getTimeStamp() + ": " + currentSSN
+					+ " entered an invalid index while browsing between " + patientSSN
+					+ " records, while trying to write.");
+
+			out.println("No such record exist.");
+			return false;
+		}
 	}
 
 	/**
@@ -131,9 +147,8 @@ public abstract class User {
 	 * @param patient
 	 * @return true if successful deletion
 	 */
-	public boolean delete(Patient patient) {
-		LOG.append(GetCurrentTimeStamp.getTimeStamp() + ": " + CERTIFICATE.toString() + " tried to delete "
-				+ patient.toString());
+	public boolean delete(int recordID) {
+		Log.append(GetCurrentTimeStamp.getTimeStamp() + ": " + currentSSN + " tried to delete " + patient.toString());
 		return false;
 	}
 	
