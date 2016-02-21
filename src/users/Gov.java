@@ -57,11 +57,11 @@ public class Gov extends User {
 		if(!listAllRecords(patientSSN)) {
 			return false;
 		}
-
+		List<Record> patientRecords = db.getRecords(patientSSN);
 		try {
 			String s = in.readLine();
 			int index = Integer.parseInt(s);
-			if (index >= 0 && index < patientRecords.size()) {
+			if (index > 0 && index <= patientRecords.size()) {
 				Record record = patientRecords.get(index - 1);
 				boolean success = db.deleteRecord(patientSSN, record);
 				saveDatabase();
@@ -82,7 +82,6 @@ public class Gov extends User {
 		} catch (Exception e) {
 			Log.append(e.toString() + " was thrown, whilst trying to delete one of " + patientSSN + "'s records.");
 		}
-		saveDatabase();
 		return false;
 	}
 

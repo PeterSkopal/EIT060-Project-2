@@ -72,6 +72,9 @@ public class Database implements Serializable {
 				return false;
 
 			patientList.remove(r);
+			if(patientList.isEmpty()) {
+				recordList.remove(patientSSN);
+			}
 			return true;
 		}
 		return false;
