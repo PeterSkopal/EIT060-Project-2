@@ -1,5 +1,8 @@
 package users;
 
+import java.io.BufferedReader;
+import java.io.PrintWriter;
+
 import Database.*;
 
 /**
@@ -15,8 +18,8 @@ public class Doctor extends User {
 	 * @param SSN
 	 * @param division
 	 */
-	public Doctor(int SSN, String division, Database db) {
-		super(SSN, division, db);
+	public Doctor(int currentSSN, String division, Database db, BufferedReader in, PrintWriter out) {
+		super(currentSSN, division, db, in, out);
 	}
 
 	public boolean create(String patientName, Nurse nurse, String input) {

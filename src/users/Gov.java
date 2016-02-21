@@ -1,5 +1,10 @@
 package users;
 
+import java.io.BufferedReader;
+import java.io.PrintWriter;
+
+import Database.Database;
+
 /**
  * 
  * @author Skopal
@@ -7,7 +12,8 @@ package users;
  */
 public class Gov extends User {
 
-	public Gov() {
+	public Gov(int currentSSN, String division, Database db, BufferedReader in, PrintWriter out) {
+		super(currentSSN, division, db, in, out);
 	}
 
 	/**
