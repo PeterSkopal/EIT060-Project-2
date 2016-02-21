@@ -57,11 +57,11 @@ public abstract class User {
 	public boolean read(String patientSSN) {
 		List<Record> patientRecords = db.getRecords(patientSSN);
 
+		out.println("Choose which record you want to read.");
 		for (int i = 1; i <= patientRecords.size(); i++) {
 			out.println(i + ": " + patientRecords.get(i - 1).getId());
 		}
 
-		out.println("Choose which record you want to read.");
 		try {
 			String s = in.readLine();
 			int index = Integer.parseInt(s);
@@ -101,11 +101,11 @@ public abstract class User {
 	public boolean write(String patientSSN, String data) {
 		List<Record> patientRecords = db.getRecords(patientSSN);
 
+		out.println("Choose which record you want to write.");
 		for (int i = 1; i <= patientRecords.size(); i++) {
 			out.println(i + ": " + patientRecords.get(i - 1).getId());
 		}
 
-		out.println("Choose which record you want to write.");
 		try {
 			String s = in.readLine();
 			int index = Integer.parseInt(s);

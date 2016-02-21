@@ -28,11 +28,11 @@ public class Gov extends User {
 	public boolean delete(String patientSSN) {
 		List<Record> patientRecords = db.getRecords(patientSSN);
 
+		out.println("Choose which record you want to delete.");
 		for (int i = 1; i <= patientRecords.size(); i++) {
 			out.println(i + ": " + patientRecords.get(i - 1).getId());
 		}
 
-		out.println("Choose which record you want to delete.");
 		try {
 			String s = in.readLine();
 			int index = Integer.parseInt(s);
