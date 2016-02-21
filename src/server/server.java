@@ -1,11 +1,26 @@
 package server;
-import java.io.*;
-import java.net.*;
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.ServerSocket;
 import java.security.KeyStore;
-import javax.net.*;
-import javax.net.ssl.*;
+
+import javax.net.ServerSocketFactory;
+import javax.net.ssl.KeyManagerFactory;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLServerSocket;
+import javax.net.ssl.SSLServerSocketFactory;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.SSLSocket;
+import javax.net.ssl.TrustManagerFactory;
 import javax.security.cert.X509Certificate;
 
+import users.Doctor;
+import users.Gov;
+import users.Nurse;
+import users.Patient;
 import users.User;
 
 public class server implements Runnable {
@@ -22,18 +37,45 @@ public class server implements Runnable {
             SSLSocket socket=(SSLSocket)serverSocket.accept();
             newListener();
             SSLSession session = socket.getSession();
-            X509Certificate cert = (X509Certificate)session.getPeerCertificateChain()[0];
-            String subject = cert.getSubjectDN().getName();
-    	    numConnectedClients++;
-            System.out.println("client connected");
-            System.out.println("client name (cert subject DN field): " + subject);
-            System.out.println(numConnectedClients + " concurrent connection(s)\n");
-
             PrintWriter out = null;
             BufferedReader in = null;
             out = new PrintWriter(socket.getOutputStream(), true);
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             
+            X509Certificate cert = (X509Certificate)session.getPeerCertificateChain()[0];
+            String subject = cert.getSubjectDN().getName();   
+            
+            int ssn = Integer.parseInt(getValByAttributeTypeFromIssuerDN(subject,"CN"));
+            String userType = getValByAttributeTypeFromIssuerDN(subject,"OU");
+            String division = getValByAttributeTypeFromIssuerDN(subject,"O");
+            User user;
+            switch (userType) {
+            	case "Doctor":
+            		user = new Doctor(ssn, division, db);
+            		break;
+            	case "Nurse":
+            		user = new Nurse(ssn, division, db);
+            		break;
+            	case "Patient":
+            		user = new Patient(ssn, division, db);
+            		break;
+            	case "Government":
+            		user = new Gov(ssn, division, db);
+            		break;
+            	default:
+            		out.println("Your usertype is not valid");
+            		in.close();
+            		out.close();
+            		socket.close();
+            		numConnectedClients--;
+            		break;
+            }
+            
+    	    numConnectedClients++;
+            System.out.println("client connected");
+            System.out.println("client name (cert subject DN field): " + subject);
+            System.out.println(numConnectedClients + " concurrent connection(s)\n");
+
             String clientMsg = null;
             String msgSplits[] = null;
             while ((clientMsg = in.readLine()) != null) {
@@ -131,5 +173,29 @@ public class server implements Runnable {
             return ServerSocketFactory.getDefault();
         }
         return null;
+    }
+    
+    /**
+     * Gets value from DN string of X509 certificate
+     * @param dn DN string 
+     * @param attributeType The attribute you want to collect. 
+     * @return
+     */
+    private String getValByAttributeTypeFromIssuerDN(String dn, String attributeType)
+    {
+    	attributeType += "=";
+        String[] dnSplits = dn.split(","); 
+        for (String dnSplit : dnSplits) 
+        {
+            if (dnSplit.contains(attributeType)) 
+            {
+                String[] cnSplits = dnSplit.trim().split("=");
+                if(cnSplits[1]!= null)
+                {
+                    return cnSplits[1].trim();
+                }
+            }
+        }
+        return "";
     }
 }
