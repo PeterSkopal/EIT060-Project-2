@@ -71,7 +71,7 @@ public class server implements Runnable {
 			X509Certificate cert = (X509Certificate) session.getPeerCertificateChain()[0];
 			String subject = cert.getSubjectDN().getName();
 
-			int ssn = Integer.parseInt(getValByAttributeTypeFromIssuerDN(subject, "CN"));
+			String ssn = getValByAttributeTypeFromIssuerDN(subject, "CN");
 			String userType = getValByAttributeTypeFromIssuerDN(subject, "OU");
 			String division = getValByAttributeTypeFromIssuerDN(subject, "O");
 			User user = null;
