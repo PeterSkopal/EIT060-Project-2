@@ -120,8 +120,7 @@ public class server implements Runnable {
 					case "create":
 						if (msgSplits.length < 5)
 							break;
-						user.create(msgSplits[1], msgSplits[2],
-								msgSplits[3], user.getDivision(), msgSplits[4]);
+						user.create(msgSplits[1], msgSplits[2], msgSplits[3]);
 						break;
 					case "read":
 						if (msgSplits.length < 2)

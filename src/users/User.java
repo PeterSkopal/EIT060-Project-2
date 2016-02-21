@@ -148,7 +148,7 @@ public abstract class User {
 	 * @param input
 	 * @return true if successful
 	 */
-	public boolean create(String patientSSN, String doctorSSN, String nurseSSN, String division, String data) {
+	public boolean create(String patientSSN, String nurseSSN, String data) {
 		out.println("You don't have enough permissions to create a medical record.\n");
 		return false;
 	}
