@@ -113,40 +113,45 @@ public class server implements Runnable {
 			String clientMsg = null;
 			String msgSplits[] = null;
 			while ((clientMsg = in.readLine()) != null) {
-
 				msgSplits = clientMsg.split(" ");
 
 				if (msgSplits[0] != null) {
 					switch (msgSplits[0]) {
 					case "help":
-						out.println(
-								"Available commands:\n"
-								+ "create\t<patient id>\t<nurse id>\t<data>\n"
-								+ "read\t<patient id>\n"
-								+ "write\t<patient id>\t<data>\n"
-								+ "delete\t<patient id>\n");
+						out.println("Available commands:\n" + "create\t<patient id>\t<nurse id>\t<data>\n"
+								+ "read\t<patient id>\n" + "write\t<patient id>\t<data>\n" + "delete\t<patient id>\n");
 						break;
 					case "create":
-						if (msgSplits.length < 3)
+						if (msgSplits.length < 3) {
+							out.println("Invalid syntax.");
 							break;
+						}
 						user.create(msgSplits[1], msgSplits[2], msgSplits[3]);
 						break;
 					case "read":
-						if (msgSplits.length < 2)
+						if (msgSplits.length < 2) {
+							out.println("Invalid syntax.");
 							break;
+						}
 						user.read(msgSplits[1]);
 						break;
 					case "delete":
-						if (msgSplits.length < 2)
+						if (msgSplits.length < 2) {
+							out.println("Invalid syntax.");							
 							break;
+						}
 						user.delete(msgSplits[1]);
 						break;
 					case "write":
-						if (msgSplits.length < 2)
+						if (msgSplits.length < 2) {
+							out.println("Invalid syntax.");							
 							break;
+						}
 						user.write(msgSplits[1], msgSplits[2]);
+						break;
 					default:
 						out.println("Unrecognized command.\n");
+						break;
 					}
 				}
 				out.flush();

@@ -57,10 +57,11 @@ public abstract class User {
 	 * @param patient
 	 * @return true if the user has permission
 	 */
-	public void listAllRecords(String patientSSN) {
+	public boolean listAllRecords(String patientSSN) {
 		List<Record> patientRecords = db.getRecords(patientSSN);
 		if (patientRecords == null) {
 			out.println("No records found");
+			return false;
 		}
 		out.print("Choose record.\n");
 		
@@ -68,6 +69,7 @@ public abstract class User {
 			out.print(i + "|\tDoctor: " + patientRecords.get(i - 1).getDoctor() + "\tDivision: " + patientRecords.get(i - 1).getDivision() + "\n");
 		}
 		out.println();
+		return true;
 	}
 
 	/**

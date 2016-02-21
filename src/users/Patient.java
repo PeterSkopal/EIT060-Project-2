@@ -20,7 +20,9 @@ public class Patient extends User {
 	}
 	
 	public boolean read(String patientSSN) {
-		listAllRecords(patientSSN);
+		if(!listAllRecords(patientSSN)) {
+			return false;
+		}
 		List<Record> patientRecords = db.getRecords(patientSSN);
 		try {
 			String s = in.readLine();

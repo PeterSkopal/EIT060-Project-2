@@ -20,7 +20,9 @@ public class Gov extends User {
 	}
 
 	public boolean read(String patientSSN) {
-		listAllRecords(patientSSN);
+		if(!listAllRecords(patientSSN)) {
+			return false;
+		}
 		List<Record> patientRecords = db.getRecords(patientSSN);
 		try {
 			String s = in.readLine();
@@ -52,11 +54,8 @@ public class Gov extends User {
 	 * @return true if successful deletion
 	 */
 	public boolean delete(String patientSSN) {
-		List<Record> patientRecords = db.getRecords(patientSSN);
-
-		out.println("Choose which record you want to delete.");
-		for (int i = 1; i <= patientRecords.size(); i++) {
-			out.println(i + ": " + patientRecords.get(i - 1).getId());
+		if(!listAllRecords(patientSSN)) {
+			return false;
 		}
 
 		try {
