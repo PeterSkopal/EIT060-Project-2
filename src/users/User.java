@@ -70,10 +70,10 @@ public abstract class User {
 				if (record.getDoctor().equals(currentSSN) || record.getNurse().equals(currentSSN)
 						|| record.getPatient().equals(currentSSN)) {
 					out.println(record.toString());
-					Log.append("User: " + currentSSN + " read record id: " + record.getId() + ", from patient id:" + patientSSN);
+					Log.append("User: " + currentSSN + " read record id: " + record.getId() + ", from patient id: " + patientSSN);
 					return true;
 				} else {
-					Log.append("User: " + currentSSN + " tried to read record id: " + record.getId() + ", from patient id:" + patientSSN);
+					Log.append("User: " + currentSSN + " tried to read record id: " + record.getId() + ", from patient id: " + patientSSN);
 					
 					out.println("You do not have permission. Try another patient.");
 					return false;
@@ -86,7 +86,7 @@ public abstract class User {
 				return false;
 			}
 		} catch (Exception e) {
-			Log.append(e.toString() + " was thrown, whilst reading " + patientSSN + "'s records.");
+			Log.append(e.toString() + " was thrown, whilst user id: " + currentSSN + "trying to read patient id: " + patientSSN + "'s records.");
 			return false;
 		}
 	}
@@ -114,11 +114,11 @@ public abstract class User {
 				if (record.getDoctor().equals(currentSSN) || record.getNurse().equals(currentSSN)) {
 					record.writeData(data);
 					saveDatabase();
-					Log.append(currentSSN + " wrote: " + data + ", to "
+					Log.append("User: " + currentSSN + " wrote data: " + data + ", to record id: " + record.getId() + ", to patient id: "
 							+ patientSSN);
 					return true;
 				} else {
-					Log.append(currentSSN + " tried to write: " + data + ", to "
+					Log.append(currentSSN + " tried to write: " + data + ", to record id: " + record.getId() + ", to patient id: "
 							+ patientSSN);
 					
 					out.println("You do not have permission. Try another patient.");
