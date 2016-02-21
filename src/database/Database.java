@@ -39,12 +39,12 @@ public class Database implements Serializable {
 	 * @param nurse Name of the associated nurse.
 	 * @param data Medical data string.
 	 */
-	public void createRecord(int patient, int doctor, int nurse, String data) {
+	public void createRecord(int patient, int doctor, int nurse, String division, String data) {
 		if(recordList.get(patient) == null) {
 			recordList.put(patient, new ArrayList<Record>());
 		}
 		
-		recordList.get(patient).add(new Record(patient, doctor, nurse, data, idCounter));
+		recordList.get(patient).add(new Record(patient, doctor, nurse, division, data, idCounter));
 		idCounter++;
 	}
 	
