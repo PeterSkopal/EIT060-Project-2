@@ -45,6 +45,7 @@ public abstract class User {
 		this.division = division;
 		this.in = in;
 		this.out = out;
+		this.db = db;
 	}
 
 	/**
@@ -56,16 +57,21 @@ public abstract class User {
 	 */
 	public boolean read(String patientSSN) {
 		List<Record> patientRecords = db.getRecords(patientSSN);
-
-		out.println("Choose which record you want to read.");
-		for (int i = 1; i <= patientRecords.size(); i++) {
-			out.println(i + ": " + patientRecords.get(i - 1).getId());
+		if(patientRecords == null) {
+			out.println("No records found");
+			return false;
 		}
+		out.print("Choose which record you want to read.\n");
+		
+		for (int i = 1; i <= patientRecords.size(); i++) {
+			out.print(i + "|\tDoctor: " + patientRecords.get(i - 1).getDoctor() + "\tDivision: " + patientRecords.get(i - 1).getDivision() + "\n");
+		}
+		out.println();
 
 		try {
 			String s = in.readLine();
 			int index = Integer.parseInt(s);
-			if (index >= 0 && index < patientRecords.size()) {
+			if (index > 0 && index <= patientRecords.size()) {
 				Record record = patientRecords.get(index - 1);
 				if (record.getDoctor().equals(currentSSN) || record.getNurse().equals(currentSSN)
 						|| record.getPatient().equals(currentSSN)) {
@@ -75,7 +81,7 @@ public abstract class User {
 				} else {
 					Log.append("User: " + currentSSN + " tried to read record id: " + record.getId() + ", from patient id: " + patientSSN);
 					
-					out.println("You do not have permission. Try another patient.");
+					out.println("You do not have permission. Try another patient.\n");
 					return false;
 				}
 			} else {
@@ -160,6 +166,7 @@ public abstract class User {
 	 * @return true if successful deletion
 	 */
 	public boolean delete(String recordID) {
+		out.println("You do not have permission to delete a record\n");
 		Log.append(currentSSN + " tried to delete " + recordID);
 		return false;
 	}
@@ -175,7 +182,7 @@ public abstract class User {
 			out.writeObject(db);
 			out.close();
 			fileOut.close();
-			System.out.printf("Serialized data is saved in /tmp/employee.ser");
+			System.out.printf("Serialized data is saved in " + db.getFilePath());
 		} catch (IOException i) {
 			i.printStackTrace();
 			return false;

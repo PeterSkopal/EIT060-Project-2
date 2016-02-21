@@ -10,8 +10,8 @@ public class Log {
 
 	public static void append(String message) {
 		try {
-			PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("myfile.txt", true)));
-			out.println(timestamp() + " - " + message + "\n");
+			PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("serverlog.txt", true)));
+			out.println(timestamp() + " - " + message);
 			out.close();
 		} catch (IOException e) {
 			// exception handling left as an exercise for the reader

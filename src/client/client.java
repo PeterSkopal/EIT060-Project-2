@@ -68,7 +68,6 @@ public class client {
 																				// (storepass)
 				ts.load(new FileInputStream(new File("../certificates/clienttruststore")), "password".toCharArray()); // truststore
 																										// password
-																										// (storepass);
 				kmf.init(ks, password); // user password (keypass)
 				tmf.init(ts); // keystore can be used as truststore here
 				ctx.init(kmf.getKeyManagers(), tmf.getTrustManagers(), null);
@@ -105,12 +104,12 @@ public class client {
 				if (msg.equalsIgnoreCase("quit")) {
 					break;
 				}
-				System.out.print("sending '" + msg + "' to server...");
 				out.println(msg);
 				out.flush();
-				System.out.println("done");
-
-				System.out.println("received '" + in.readLine() + "' from server\n");
+				do {
+					System.out.println(in.readLine());
+				}
+				while(in.ready());
 			}
 			in.close();
 			out.close();

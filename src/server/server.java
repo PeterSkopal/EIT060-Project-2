@@ -31,7 +31,7 @@ public class server implements Runnable {
 	private Database db = null;
 	private static int numConnectedClients = 0;
 
-	public static final String databaseFilepath = "/database.ser";
+	public static final String databaseFilepath = "database.ser";
 
 	public server(ServerSocket ss) throws IOException {
 		initializeDatabase();
@@ -77,18 +77,23 @@ public class server implements Runnable {
 			User user = null;
 			switch (userType) {
 			case "Doctor":
+				System.out.println("Doctor has connected");
 				user = new Doctor(ssn, division, db, in, out);
 				break;
 			case "Nurse":
+				System.out.println("Nurse has connected");
 				user = new Nurse(ssn, division, db, in, out);
 				break;
 			case "Patient":
+				System.out.println("Patient has connected");
 				user = new Patient(ssn, division, db, in, out);
 				break;
 			case "Government":
+				System.out.println("Governemt has connected");
 				user = new Gov(ssn, division, db, in, out);
 				break;
 			default:
+				System.out.println("Invalid user has connected");
 				out.println("Your usertype is not valid");
 				in.close();
 				out.close();
@@ -101,7 +106,7 @@ public class server implements Runnable {
 			}
 
 			numConnectedClients++;
-			System.out.println("client connected");
+			Log.append("User: " + user.getSSN() + " connected to server");
 			System.out.println("client name (cert subject DN field): " + subject);
 			System.out.println(numConnectedClients + " concurrent connection(s)\n");
 
@@ -115,10 +120,14 @@ public class server implements Runnable {
 					switch (msgSplits[0]) {
 					case "help":
 						out.println(
-								"Available commands:\ncreate <patient id> <nurse id> <doctor id> <data>\nread <patient id>\nwrite <patient id> <data>\ndelete <patient id>\ndelete");
+								"Available commands:\n"
+								+ "create\t<patient id>\t<nurse id>\t<data>\n"
+								+ "read\t<patient id>\n"
+								+ "write\t<patient id>\t<data>\n"
+								+ "delete\t<patient id>\n");
 						break;
 					case "create":
-						if (msgSplits.length < 5)
+						if (msgSplits.length < 3)
 							break;
 						user.create(msgSplits[1], msgSplits[2], msgSplits[3]);
 						break;

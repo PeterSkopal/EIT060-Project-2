@@ -1,5 +1,7 @@
 package database;
 
+import java.io.Serializable;
+
 /**
  * A medical record for a specific patient. A nurse and a doctor is associated
  * with the record. The record contains medical data which can be appended(?) by
@@ -10,7 +12,7 @@ package database;
  * @author M�ns
  *
  */
-public class Record {
+public class Record implements Serializable{
 
 	private String patientSSN, doctorSSN, nurseSSN, division, data;
 	private int id;

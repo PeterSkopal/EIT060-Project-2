@@ -27,7 +27,7 @@ public class Doctor extends User {
 		db.createRecord(patientSSN, currentSSN, nurseSSN, division, input);
 		saveDatabase();
 		out.println((currentSSN + " created medical record for patient " + patientSSN));
-		Log.append(currentSSN + " created medical record for patient " + patientSSN);
+		Log.append("Doctor: " + currentSSN + " created medical record for patient " + patientSSN);
 		return true;
 	}
 }
