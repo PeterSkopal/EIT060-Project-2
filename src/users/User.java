@@ -113,6 +113,7 @@ public abstract class User {
 				Record record = patientRecords.get(index - 1);
 				if (record.getDoctor() == currentSSN || record.getNurse() == currentSSN) {
 					record.writeData(data);
+					saveDatabase();
 					Log.append(currentSSN + " wrote: " + data + ", to "
 							+ patientSSN);
 					return true;
@@ -148,6 +149,7 @@ public abstract class User {
 	 * @return true if successful
 	 */
 	public boolean create(int patientSSN, int doctorSSN, int nurseSSN, String division, String data) {
+		out.println("You don't have enough permissions to create a medical record.\n");
 		return false;
 	}
 
