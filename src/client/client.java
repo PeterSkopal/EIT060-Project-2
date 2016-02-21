@@ -43,8 +43,15 @@ public class client {
                 KeyManagerFactory kmf = KeyManagerFactory.getInstance("SunX509");
                 TrustManagerFactory tmf = TrustManagerFactory.getInstance("SunX509");
                 SSLContext ctx = SSLContext.getInstance("TLS");
-                ks.load(new FileInputStream("clientkeystore"), password);  // keystore password (storepass)
-				ts.load(new FileInputStream("clienttruststore"), password); // truststore password (storepass);
+                
+                System.out.print("What is the name of your keystore?\n> ");
+                BufferedReader read = new BufferedReader(new InputStreamReader(System.in));
+                String keystoreName = read.readLine();
+                keystoreName = "../certificates/" + keystoreName;
+                
+                
+                ks.load(new FileInputStream(new File(keystoreName)), password);  // keystore password (storepass)
+				ts.load(new FileInputStream(new File("../certificates/clienttruststore")), password); // truststore password (storepass);
 				kmf.init(ks, password); // user password (keypass)
 				tmf.init(ts); // keystore can be used as truststore here
 				ctx.init(kmf.getKeyManagers(), tmf.getTrustManagers(), null);
