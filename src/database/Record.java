@@ -1,4 +1,4 @@
-package Database;
+package database;
 
 /**
  * A medical record for a specific patient. A nurse and a doctor is associated with the record.
