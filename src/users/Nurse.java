@@ -18,7 +18,7 @@ public class Nurse extends User {
 	 * @param name
 	 * @param division
 	 */
-	public Nurse(int currentSSN, String division, Database db, BufferedReader in, PrintWriter out) {
+	public Nurse(String currentSSN, String division, Database db, BufferedReader in, PrintWriter out) {
 		super(currentSSN, division, db, in, out);
 	}
 }

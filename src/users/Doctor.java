@@ -18,7 +18,7 @@ public class Doctor extends User {
 	 * @param SSN
 	 * @param division
 	 */
-	public Doctor(int currentSSN, String division, Database db, BufferedReader in, PrintWriter out) {
+	public Doctor(String currentSSN, String division, Database db, BufferedReader in, PrintWriter out) {
 		super(currentSSN, division, db, in, out);
 	}
 

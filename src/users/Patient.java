@@ -12,7 +12,7 @@ import database.Database;
  */
 public class Patient extends User {
 
-	public Patient(int currentSSN, String division, Database db, BufferedReader in, PrintWriter out) {
+	public Patient(String currentSSN, String division, Database db, BufferedReader in, PrintWriter out) {
 		super(currentSSN, division, db, in, out);
 	}
 }
