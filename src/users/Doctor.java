@@ -24,6 +24,7 @@ public class Doctor extends User {
 
 	public boolean create(int patientSSN, int nurseSSN, String input) {
 		db.createRecord(patientSSN, currentSSN, nurseSSN, division, input);
+		saveDatabase();
 		out.println((currentSSN + " created medical record for patient " + patientSSN));
 		return true;
 	}

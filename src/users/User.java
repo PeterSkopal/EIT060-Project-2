@@ -168,7 +168,7 @@ public abstract class User {
 	 * 
 	 * @return
 	 */
-	private boolean saveDatabase() {
+	protected boolean saveDatabase() {
 		try {
 			FileOutputStream fileOut = new FileOutputStream(db.getFilePath());
 			ObjectOutputStream out = new ObjectOutputStream(fileOut);
