@@ -1,15 +1,17 @@
 package users;
+
 /**
  * 
  * @author Skopal
  *
  */
-public class Patient {
+public class Patient extends User {
+	private int SSN;
 	private Doctor doctor;
 	private Nurse nurse;
 
-	public Patient(String name, String division, Doctor doctor, Nurse nurse) {
-		super();
+	public Patient(int SSN, String division, Doctor doctor, Nurse nurse, Database db) {
+		super(SSN, division, db);
 		this.doctor = doctor;
 		this.nurse = nurse;
 	}
@@ -29,6 +31,8 @@ public class Patient {
 	}
 	
 	public String toString() {
-		return "Patients name; " + name + "Patients division: " + division +  ". Patients Doctor: " + doctor.toString() + "Patients Nurse: " + nurse.toString();
+		return "Patients Social Security Number; " + SSN + "Patients division: " + division +  ". Patients Doctor: " + doctor.toString() + "Patients Nurse: " + nurse.toString();
 	}
+	
+	
 }

@@ -2,6 +2,8 @@ package users;
 
 import java.util.List;
 
+import Database.*;
+
 /**
  * This class specifies a User of the system. These can be of several types:
  * Nurse, Doctor, Gov & Patient.
@@ -10,8 +12,17 @@ import java.util.List;
  *
  */
 public abstract class User {
-	private String name;
+	private int SSN;
 	private String division;
+	private Database db;
+
+	public int getSSN() {
+		return SSN;
+	}
+
+	public String getDivision() {
+		return division;
+	}
 
 	/**
 	 * Creates a User
@@ -19,8 +30,8 @@ public abstract class User {
 	 * @param name
 	 * @param division
 	 */
-	public User(String name, String division) {
-		this.name = name;
+	public User(int SSN, String division, Database db) {
+		this.SSN = SSN;
 		this.division = division;
 	}
 
@@ -32,8 +43,8 @@ public abstract class User {
 	 */
 	public boolean read(Patient patient) {
 		if (patient.hasThisTreator(CERTIFICATE.typeOfUser())) {
-			RECORD patientRecord = RECORDS.get(patient).record();
-			System.out.println(patientRecord);
+			List<Record> patientRecords = db.getRecords(patient.getSSN());
+			System.out.println(patientRecords);
 			LOG.append(GetCurrentTimeStamp.getTimeStamp() + ": " + CERTIFICATE.toString() + " read "
 					+ patient.toString() + " record.");
 			return true;
@@ -42,35 +53,55 @@ public abstract class User {
 		return false;
 	}
 
-	/**
-	 * Prints out all the records from the users associated Division.
-	 * 
-	 * @return true if authenticated
-	 */
-	public boolean readDivision() {
-		List<RECORD> myPatientsRecords = RECORDS.makeAListOfEveryPatientRecordIHave(name);
-		if (myPatientsRecords.size() > 0) {
-			System.out.println(myPatientsRecords);
-			LOG.append(GetCurrentTimeStamp.getTimeStamp() + ": " + CERTIFICATE.toString()
-					+ " read all the records from her/his division.");
-			return true;
-		}
-		System.out.println("You do not have any patients.");
-		return false;
-	}
+	// /**
+	// * Prints out all the records from the users associated Division.
+	// *
+	// * @return true if authenticated
+	// */
+	// public boolean readDivision() {
+	// List<RECORD> myPatientsRecords =
+	// RECORDS.makeAListOfEveryPatientRecordIHave(name);
+	// if (myPatientsRecords.size() > 0) {
+	// System.out.println(myPatientsRecords);
+	// LOG.append(GetCurrentTimeStamp.getTimeStamp() + ": " +
+	// CERTIFICATE.toString()
+	// + " read all the records from her/his division.");
+	// return true;
+	// }
+	// System.out.println("You do not have any patients.");
+	// return false;
+	// }
 
 	/**
-	 * Appends the input into already existing record
+	 * Appends data into already existing record
 	 * 
-	 * @param input
+	 * @param patient
+	 * @param data
 	 * @return true if permission to write is allowed
 	 */
-	public boolean write(String input, Patient patient) {
-		if (patient.hasThisTreator(CERTIFICATE.typeOfUser())) {
-			RECORD patientRecord = RECORDS.appendToRecord(patient, input);
-			LOG.append(GetCurrentTimeStamp.getTimeStamp() + ": " + CERTIFICATE.toString() " wrote: " + input + ", to " + patient.toString);
-			return true;
+	public boolean write(int patientSSN, String data) {
+		List<Record> patientRecords = db.getRecords(patientSSN);
+
+		for (int i = 1; i <= patientRecords.size(); i++) {
+			System.out.println(i + ": " + patientRecords.get(i - 1).getId());
 		}
+
+		System.out.println("Choose which record you want to write.");
+		String s = InputStream(); // Här får vi en siffra från inputen
+		int index = Integer.parseInt(s);
+		if (index >= 0 && index < patientRecords.size()) {
+			Record record = patientRecords.get(index - 1);
+			if (record.getDoctor() == currentSSN || record.getNurse() == currentSSN) {
+				
+			}
+			record.writeData(data);
+			LOG.append(GetCurrentTimeStamp.getTimeStamp() + ": " + CERTIFICATE.toString() + " wrote: " + data + ", to "
+					+ patientSSN);
+		} else {
+			System.out.println("No such record exist.");
+		}
+
+		return true;
 		System.out.println("You do not have permission. Try another patient.");
 		return false;
 	}
@@ -85,7 +116,7 @@ public abstract class User {
 	 * @param input
 	 * @return true if successful
 	 */
-	public boolean create(String patientName, Nurse nurse, String input) {
+	public boolean create(int patientSSN, int doctorSSN, int nurseSSN, String data) {
 		return false;
 	}
 
@@ -96,6 +127,8 @@ public abstract class User {
 	 * @return true if successful deletion
 	 */
 	public boolean delete(Patient patient) {
+		LOG.append(GetCurrentTimeStamp.getTimeStamp() + ": " + CERTIFICATE.toString() + " tried to delete "
+				+ patient.toString());
 		return false;
 	}
 

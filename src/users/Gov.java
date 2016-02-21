@@ -1,10 +1,11 @@
 package users;
+
 /**
  * 
  * @author Skopal
  *
  */
-public class Gov {
+public class Gov extends User {
 
 	public Gov() {
 	}
@@ -22,5 +23,11 @@ public class Gov {
 			return true;
 		}
 		return false;
+	}
+
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

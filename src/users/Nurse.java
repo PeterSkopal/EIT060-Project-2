@@ -1,10 +1,11 @@
 package users;
+
 /**
- * 
+ *  
  * @author Skopal
  *
  */
-public class Nurse {
+public class Nurse extends User {
 
 	/**
 	 * Creates a Nurse to the system
@@ -12,12 +13,13 @@ public class Nurse {
 	 * @param name
 	 * @param division
 	 */
-	public Nurse(String name, String division) {
-		super();
-	}
-	
-	public String toString() {
-		return name + division;
+	public Nurse(int SSN, String division, Database db) {
+		super(SSN, division, db);
 	}
 
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
