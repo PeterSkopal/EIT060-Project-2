@@ -8,7 +8,7 @@ import java.io.Serializable;
  * the associated nurse and doctor. Simple data structure. Contains get
  * functions to retrieve data and a function to append(?) data. Each record has
  * an unique record id.
- * 
+ *
  * @author M�ns
  *
  */
@@ -43,7 +43,7 @@ public class Record implements Serializable{
 
 	/**
 	 * Appends a data string to the medical data string.
-	 * 
+	 *
 	 * @param data
 	 */
 	public void writeData(String data) {
@@ -52,7 +52,7 @@ public class Record implements Serializable{
 
 	/**
 	 * Creates a new Record file with the specified parameters.
-	 * 
+	 *
 	 * @param patient
 	 * @param doctor
 	 * @param nurse

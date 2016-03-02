@@ -137,14 +137,14 @@ public class server implements Runnable {
 						break;
 					case "delete":
 						if (msgSplits.length < 2) {
-							out.println("Invalid syntax.");							
+							out.println("Invalid syntax.");
 							break;
 						}
 						user.delete(msgSplits[1]);
 						break;
 					case "write":
 						if (msgSplits.length < 2) {
-							out.println("Invalid syntax.");							
+							out.println("Invalid syntax.");
 							break;
 						}
 						user.write(msgSplits[1], msgSplits[2]);
@@ -226,7 +226,7 @@ public class server implements Runnable {
 
 	/**
 	 * Gets value from DN string of X509 certificate
-	 * 
+	 *
 	 * @param dn
 	 *            DN string
 	 * @param attributeType

@@ -6,7 +6,7 @@ import java.util.HashMap;
 
 /**
  * A serializable database containing a list of medical records.
- * 
+ *
  * @author M�ns
  *
  */
@@ -28,7 +28,7 @@ public class Database implements Serializable {
 
 	/**
 	 * Filepath for saving on file.
-	 * 
+	 *
 	 * @return Returns filepath as a String.
 	 */
 	public String getFilePath() {
@@ -37,7 +37,7 @@ public class Database implements Serializable {
 
 	/**
 	 * Creates a record for a patient.
-	 * 
+	 *
 	 * @param patientName
 	 *            Name of the patient the record belong to.
 	 * @param doctorSSN
@@ -59,7 +59,7 @@ public class Database implements Serializable {
 	/**
 	 * Tries to find the record with the specified record id. If found the
 	 * record will be deleted from the database.
-	 * 
+	 *
 	 * @param id
 	 *            Record id of the record to be deleted.
 	 * @return Returns true if specified record is deleted. If not deleted false
@@ -82,7 +82,7 @@ public class Database implements Serializable {
 
 	/**
 	 * Retrieves all records belonging to a specified patient in an arraylist.
-	 * 
+	 *
 	 * @param patientSSN
 	 * @return Arraylist of all records belonging to patientName.
 	 */
