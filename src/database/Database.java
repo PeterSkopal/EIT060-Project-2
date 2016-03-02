@@ -68,14 +68,16 @@ public class Database implements Serializable {
 	public boolean deleteRecord(String patientSSN, Record r) {
 		if (r != null) {
 			ArrayList<Record> patientList = recordList.get(patientSSN);
-			if (patientList == null)
-				return false;
-
-			patientList.remove(r);
-			if(patientList.isEmpty()) {
-				recordList.remove(patientSSN);
+			if (patientList.contains(r)) {
+				patientList.remove(r);
+				if(patientList.isEmpty()) {
+					recordList.remove(patientSSN);
+				}
+				return true;
 			}
-			return true;
+			else {
+				return false;
+			}
 		}
 		return false;
 	}

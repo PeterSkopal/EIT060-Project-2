@@ -14,7 +14,7 @@ import server.Log;
 /**
  * This class specifies a User of the system. These can be of several types:
  * Nurse, Doctor, Gov & Patient.
- * 
+ *
  * @author Skopal
  *
  */
@@ -35,7 +35,7 @@ public abstract class User {
 
 	/**
 	 * Creates a User
-	 * 
+	 *
 	 * @param currentSSN
 	 * @param division
 	 * @param dataBase
@@ -47,13 +47,13 @@ public abstract class User {
 		this.out = out;
 		this.db = db;
 	}
-	
+
 	public abstract boolean read(String patientSSN);
 
 	/**
 	 * Prints out one record belonging to a Patient if user has permission to
 	 * read record.
-	 * 
+	 *
 	 * @param patient
 	 * @return true if the user has permission
 	 */
@@ -64,7 +64,7 @@ public abstract class User {
 			return false;
 		}
 		out.print("Choose record.\n");
-		
+
 		for (int i = 1; i <= patientRecords.size(); i++) {
 			out.print(i + "|\tDoctor: " + patientRecords.get(i - 1).getDoctor() + "\tDivision: " + patientRecords.get(i - 1).getDivision() + "\n");
 		}
@@ -74,7 +74,7 @@ public abstract class User {
 
 	/**
 	 * Appends data into already existing record
-	 * 
+	 *
 	 * @param patient
 	 * @param data
 	 * @return true if permission to write is allowed
@@ -84,7 +84,7 @@ public abstract class User {
 	/**
 	 * Creates a completely new record associated with a certain patient if not
 	 * already existing. It is only doctors that can do this.
-	 * 
+	 *
 	 * @param patient
 	 * @param nurse
 	 *            that is associated with the perticular patient
@@ -98,7 +98,7 @@ public abstract class User {
 
 	/**
 	 * Deletes record associated with a certain patient
-	 * 
+	 *
 	 * @param patient
 	 * @return true if successful deletion
 	 */
@@ -109,17 +109,17 @@ public abstract class User {
 	}
 
 	/**
-	 * 
+	 *
 	 * @return
 	 */
 	protected boolean saveDatabase() {
 		try {
 			FileOutputStream fileOut = new FileOutputStream(db.getFilePath());
-			ObjectOutputStream out = new ObjectOutputStream(fileOut);
-			out.writeObject(db);
-			out.close();
+			ObjectOutputStream dbOut = new ObjectOutputStream(fileOut);
+			dbOut.writeObject(db);
+			dbOut.close();
 			fileOut.close();
-			System.out.printf("Serialized data is saved in " + db.getFilePath());
+			System.out.println("Serialized data is saved in " + db.getFilePath());
 		} catch (IOException i) {
 			i.printStackTrace();
 			return false;

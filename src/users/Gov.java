@@ -9,7 +9,7 @@ import database.Record;
 import server.Log;
 
 /**
- * 
+ *
  * @author Skopal
  *
  */
@@ -49,7 +49,7 @@ public class Gov extends User {
 
 	/**
 	 * Deletes record associated with a certain patient
-	 * 
+	 *
 	 * @param patient
 	 * @return true if successful deletion
 	 */
@@ -66,9 +66,11 @@ public class Gov extends User {
 				boolean success = db.deleteRecord(patientSSN, record);
 				saveDatabase();
 				if (success) {
+					out.println("Successfully deleted record");
 					Log.append(currentSSN + " deleted " + record.getId() + " from patient " + patientSSN);
 					return true;
 				} else {
+					out.println("You do not have access to delete that record");
 					Log.append(currentSSN + " tried to delete" + record.getId() + " from patient " + patientSSN
 							+ " but failed");
 					return false;
@@ -87,6 +89,7 @@ public class Gov extends User {
 
 	@Override
 	public boolean write(String patientSSN, String data) {
+		out.println("You do not have access to write to records");
 		Log.append("User: " + currentSSN + " tried to write on a record of patient id: " + patientSSN);
 		return false;
 	}

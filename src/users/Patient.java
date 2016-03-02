@@ -9,7 +9,7 @@ import database.Record;
 import server.Log;
 
 /**
- * 
+ *
  * @author Skopal
  *
  */
@@ -18,7 +18,7 @@ public class Patient extends User {
 	public Patient(String currentSSN, String division, Database db, BufferedReader in, PrintWriter out) {
 		super(currentSSN, division, db, in, out);
 	}
-	
+
 	public boolean read(String patientSSN) {
 		if(!listAllRecords(patientSSN)) {
 			return false;
@@ -41,7 +41,7 @@ public class Patient extends User {
 			} else {
 				Log.append(currentSSN + " entered an invalid index while browsing between " + patientSSN
 						+ " records, while trying to read.");
-				
+
 				out.println("No such record exist.");
 				return false;
 			}
@@ -50,10 +50,11 @@ public class Patient extends User {
 			return false;
 		}
 	}
-	
+
 	@Override
 	public boolean write(String patientSSN, String data) {
 		Log.append("User: " + currentSSN + " tried to write on a record of patient id: " + patientSSN);
+		out.println("You do not have access to write to records");
 		return false;
 	}
 }

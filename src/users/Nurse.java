@@ -9,7 +9,7 @@ import database.Record;
 import server.Log;
 
 /**
- * 
+ *
  * @author Skopal
  *
  */
@@ -17,14 +17,14 @@ public class Nurse extends User {
 
 	/**
 	 * Creates a Nurse to the system
-	 * 
+	 *
 	 * @param name
 	 * @param division
 	 */
 	public Nurse(String currentSSN, String division, Database db, BufferedReader in, PrintWriter out) {
 		super(currentSSN, division, db, in, out);
 	}
-	
+
 	public boolean read(String patientSSN) {
 		if(!listAllRecords(patientSSN)) {
 			return false;
@@ -47,7 +47,7 @@ public class Nurse extends User {
 			} else {
 				Log.append(currentSSN + " entered an invalid index while browsing between " + patientSSN
 						+ " records, while trying to read.");
-				
+
 				out.println("No such record exist.");
 				return false;
 			}
@@ -71,11 +71,12 @@ public class Nurse extends User {
 					saveDatabase();
 					Log.append("User: " + currentSSN + " wrote data: " + data + ", to record id: " + record.getId() + ", to patient id: "
 							+ patientSSN);
+					out.println("Successfully updated record");
 					return true;
 				} else {
 					Log.append("User: " + currentSSN + " tried to write: " + data + ", to record id: " + record.getId() + ", to patient id: "
 							+ patientSSN);
-					
+
 					out.println("You do not have permission. Try another patient.");
 					return false;
 				}
@@ -83,7 +84,7 @@ public class Nurse extends User {
 				Log.append(currentSSN
 						+ " entered an invalid index while browsing between " + patientSSN
 						+ " records, while trying to write.");
-				
+
 				out.println("No such record exist.");
 				return false;
 			}

@@ -126,7 +126,11 @@ public class server implements Runnable {
 							out.println("Invalid syntax.");
 							break;
 						}
-						user.create(msgSplits[1], msgSplits[2], msgSplits[3]);
+						String readData = "";
+						for(int i = 3; i < msgSplits.length; i++) {
+							readData += msgSplits[i] + " ";
+						}
+						user.create(msgSplits[1], msgSplits[2], readData);
 						break;
 					case "read":
 						if (msgSplits.length < 2) {
@@ -147,7 +151,11 @@ public class server implements Runnable {
 							out.println("Invalid syntax.");
 							break;
 						}
-						user.write(msgSplits[1], msgSplits[2]);
+						String writeData = "";
+						for(int i = 3; i < msgSplits.length; i++) {
+							writeData += msgSplits[i] + " ";
+						}
+						user.write(msgSplits[1], writeData);
 						break;
 					default:
 						out.println("Unrecognized command.\n");
