@@ -72,7 +72,7 @@ public class Doctor extends User {
 		try {
 			String s = in.readLine();
 			int index = Integer.parseInt(s);
-			if (index >= 0 && index < patientRecords.size()) {
+			if (index > 0 && index <= patientRecords.size()) {
 				Record record = patientRecords.get(index - 1);
 				if (record.getDoctor().equals(currentSSN)) {
 					record.writeData(data);

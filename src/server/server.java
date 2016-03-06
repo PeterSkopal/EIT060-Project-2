@@ -152,7 +152,7 @@ public class server implements Runnable {
 							break;
 						}
 						String writeData = "";
-						for(int i = 3; i < msgSplits.length; i++) {
+						for(int i = 2; i < msgSplits.length; i++) {
 							writeData += msgSplits[i] + " ";
 						}
 						user.write(msgSplits[1], writeData);
